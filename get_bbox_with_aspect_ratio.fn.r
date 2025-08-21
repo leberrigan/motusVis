@@ -1,6 +1,7 @@
 get_bbox_with_aspect_ratio.fn <- function(
-    input.data, 
-    aspect_ratio = 1, 
+    input.data,
+    aspect_ratio = 1,
+    margin = 0.1, # Percent
     coords = c("lon", "lat"), 
     crs = 4326) {
 
@@ -46,7 +47,10 @@ get_bbox_with_aspect_ratio.fn <- function(
   # Step 7: Create new bbox
   bbox_fixed <- st_bbox(c(xmin = xmin_new, xmax = xmax_new,
                           ymin = ymin_new, ymax = ymax_new),
-                        crs = st_crs(crs))
+                        crs = st_crs(crs)) %>%
+    st_as_sfc() %>%
+    st_buffer( ( ymax_new - ymin_new ) / 10 ) %>%
+    st_bbox()
   
   return(bbox_fixed)
 }

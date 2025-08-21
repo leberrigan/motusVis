@@ -7,16 +7,16 @@ animateTrack <- function(data.input,
                          combine.years = F, 
                          save.prefix, 
                          colour.scale = "discrete", 
-                         colour.var = "tagDeployID", 
-                         map_service = "osm", 
-                         map_type = "topographic", 
-                         r_base,
-                         api_key,
-                         api_key_file = "api_token",
-                         bbox = NULL,
+                         colour.var = "tagDeployID",
                          show_scale = T,
-                         show_northarrow = T,
-                         text_colour = "black") {
+                         show.northarrow = T,
+                         text.colour = "black",
+                         bbox = NULL,
+                         map.service = "osm", 
+                         map.type = "topographic", 
+                         map.raster,
+                         map.api.key,
+                         map.api.key.file = "api_token") {
   
   ## Load Required Packages
   require(motus)
@@ -157,22 +157,22 @@ animateTrack <- function(data.input,
     
   }
   
-  if (missing(api_key)) {
-    warning("Missing API key for mapping service. Searching for key in secret file '",api_key_file,"'.")
-    if (file.exists(api_key_file))
-      api_key <- read_lines(api_key_file)
+  if (missing(map.api.key)) {
+    warning("Missing API key for mapping service. Searching for key in secret file '",map.api.key.file,"'.")
+    if (file.exists(map.api.key.file))
+      map.api.key <- read_lines(map.api.key.file)
     else
-      stop("Missing API key. Can't find secret file: '",api_key_file,"'")
-    if (nchar(api_key) > 10)
+      stop("Missing API key. Can't find secret file: '",map.api.key.file,"'")
+    if (nchar(map.api.key) > 10)
       message("Success! API Key found")
     else
-      stop("Secret file '",api_key_file,"' contains invalid API key '",api_key,"'")
+      stop("Secret file '",map.api.key.file,"' contains invalid API key '",map.api.key,"'")
   }
-  if (missing(r_base)) {
+  if (missing(map.raster)) {
     frames <- frames_spatial(m,
-                             map_service = map_service, 
-                             map_type = map_type, 
-                             map_token = api_key,
+                             map_service = map.service, 
+                             map.type = map.type, 
+                             map_token = map.api.key,
                              alpha = 1,
                              trace_show = TRUE,
                              path_legend = FALSE,
@@ -182,10 +182,10 @@ animateTrack <- function(data.input,
                              equidistant = F) 
   } else {
     
-    time(r_base) <- rep(tracks.df$timestamp %>% min, nlyr( r_base ))
+    time(map.raster) <- rep(tracks.df$timestamp %>% min, nlyr( map.raster ))
     
     frames <- frames_spatial(m,
-                             r = r_base,
+                             r = map.raster,
                              alpha = 1,
                              trace_show = TRUE,
                              path_legend = FALSE,
@@ -200,14 +200,14 @@ animateTrack <- function(data.input,
     add_timestamps(type = "label", format = frame.label.format) %>% 
     add_progress()
   
-  if (show_northarrow)
-    frames <- frames %>% add_northarrow(colour = text_colour)
+  if (show.northarrow)
+    frames <- frames %>% add_northarrow(colour = text.colour)
   if (show_scale)
-    frames <- frames %>% add_scalebar(colour = text_colour)
+    frames <- frames %>% add_scalebar(colour = text.colour)
   
   
   # animate frames
-  animate_frames(frames, out_file = paste0(save.prefix, "-", resolution.time, resolution.unit,"-",map_type,'.gif'), overwrite = T)
+  animate_frames(frames, out_file = paste0(save.prefix, "-", resolution.time, resolution.unit,"-",map.type,'.gif'), overwrite = T)
   
   message('Done.')
   
