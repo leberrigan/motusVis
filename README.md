@@ -35,16 +35,17 @@ animate_frames(
   combine.years = F, 
   save.prefix, 
   colour.scale = "discrete", 
-  colour.var = "tagDeployID", 
-  map_service = "osm", 
-  map_type = "topographic", 
-  r_base,
-  api_key,
-  api_key_file = "api_token",
-  bbox = NULL,
+  colour.var = "tagDeployID",
+  colour.vals = c("violetred", "turquoise"),
   show_scale = T,
-  show_northarrow = T,
-  text_colour = "black"
+  show.northarrow = T,
+  text.colour = "black",
+  bbox = NULL,
+  map.service = "osm", 
+  map.type = "topographic", 
+  map.raster,
+  map.api.key,
+  map.api.key.file = "api_token"
 )
 ```
 
@@ -57,17 +58,21 @@ animate_frames(
 | resolution.unit | (Optional) Character: unit of duration of a single frame. Can be: "days", "hours", "minutes" |
 | combine.years | (Optional) Boolean: combine years into a single year? |
 | save.prefix | (Optional) Character: Custom prefix for output files |
+| colour.scale | (Optional) Character: Either "gradient" or "discrete" |
 | colour.var | (Optional) Character: Variable used to colour tracks |
+| colour.vals | (Optional) Character: Possible colour values |
 | show.scalebar | (Optional) Boolean: Show scale bar? |
 | show.northarrow | (Optional) Boolean: Show north arrow? |
 | text.colour | (Optional) Character: Colour of scale bar and north arrow |
-| colour.var | (Optional) Character: Variable used to colour tracks |
 | bbox | (Optional) Named vector: Bounding box of tracks with xmin,xmax,ymin,ymax. Use st_bbox for simple use. |
 | map.service | (Optional) Character: Map +service provider. See get_maptypes() for a list of available map services. |
 | map.type | (Optional) Character: Map type. See get_maptypes() for a list of available map types. |
 | map.api.key | (Optional) Character: API key for map service |
 | map.api.key.file | (Optional) Character: Filename/location where API key is stored. See details. |
 | map.raster | (Optional) terra object: Either a SpatRaster (mono-temporal) or SpatRasterDataset (multi-temporal). See frames_spatial() for details. |
+
+### Details
+
 
 # Example
 

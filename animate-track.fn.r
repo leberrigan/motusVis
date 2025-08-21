@@ -8,6 +8,7 @@ animateTrack <- function(data.input,
                          save.prefix, 
                          colour.scale = "discrete", 
                          colour.var = "tagDeployID",
+                         colour.vals = c("violetred", "turquoise"),
                          show_scale = T,
                          show.northarrow = T,
                          text.colour = "black",
@@ -147,7 +148,7 @@ animateTrack <- function(data.input,
       mutate(scaleNorm = (colour - scale.range[1]) / (scale.range[2] - scale.range[1]))
     
     # Create gradient color ramp
-    colfun <- colorRampPalette(c("violetred", "turquoise"))
+    colfun <- colorRampPalette( colour.vals )
     
     
     tracks.df <- tracks.df %>%
